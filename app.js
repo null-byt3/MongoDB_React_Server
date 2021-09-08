@@ -21,7 +21,7 @@ async function runApp() {
 
 
 app.get('/', (req, res) => {
-  res.send(makeHTML(movies));
+  res.send('lol');
 });
 
 app.listen(port, () => {
