@@ -18,16 +18,19 @@ async function attemptLogin(credentials) {
 }
 
 
-export default function Login({ setToken }: Props) {
+export default function Login({ setValid }: Props) {
   const [username, setUserName] = useState();
   const [password, setPassword] = useState();
 
   const handleSubmit = async e => {
     e.preventDefault();
-    const { authSuccessful, sessionId, error } = await attemptLogin({ username, password });
-    if (authSuccessful) {
+    const res = await attemptLogin({ username, password });
+    if (res.authSuccessful) {
       Cookies.set('userId', username);
-      Cookies.set('sessionId', sessionId);
+      Cookies.set('sessionId', res?.sessionId);
+      window.location.reload(false);
+    } else {
+      console.log(res?.error);
     }
   }
 
@@ -42,7 +45,7 @@ export default function Login({ setToken }: Props) {
         </label>
         <label>
           <p>Password</p>
-          <input type="password" onChange={e => setPassword(e.target.value)}/>
+          <input type="password" autoComplete={"on"} onChange={e => setPassword(e.target.value)}/>
         </label>
         <div>
           <button type="submit">Submit</button>
