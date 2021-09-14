@@ -40,11 +40,16 @@ export default function NewExpenseModal(props) {
 
   async function onSubmit() {
     const body = { type, category, description, sum }
-    const res = await fetcher('/entries/new', {
+    const { success, error } = await fetcher('/entries/new', {
       method: 'POST',
       body: JSON.stringify(body),
-    }).catch(error => console.log(error))
-    console.log(res);
+    });
+    if (success) {
+      closeModal();
+      window.location.reload(false);
+    } else {
+      console.log(error);
+    }
   }
 
 

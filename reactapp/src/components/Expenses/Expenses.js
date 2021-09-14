@@ -1,12 +1,41 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import './Expenses.css';
 import NewExpenseModal from "./NewExpenseModal";
+import fetcher from "../../utils/Fetcher";
 
 
 const capitalize = ([first, ...rest]) => first.toUpperCase() + rest.join('').toLowerCase();
 
+function timeFormatter(dateISOString) {
+  const date = new Date(dateISOString);
+  const year = date.getFullYear().toString();
+  const month = ( date.getMonth() + 101 ).toString().substring(1);
+  const day = ( date.getDate() + 100 ).toString().substring(1);
+  const hours = date.getHours();
+  const minutes = date.getMinutes();
+  return `${day}/${month}/${year} ${hours}:${minutes}`;
+}
+
+
 export default function Expenses() {
   const [modalIsOpen, setIsOpen] = useState(false);
+  const [entries, setEntries] = useState([]);
+
+  useEffect(() => {
+    async function fetchEntries() {
+      const { success, error, entries } = await fetcher('/entries', {
+        method: 'GET'
+      });
+      if (success) {
+        setEntries(entries)
+      } else {
+        console.log(error);
+      }
+    }
+
+    fetchEntries().catch(err => console.log(err));
+  }, [])
+
 
   function openModal() {
     setIsOpen(true);
@@ -16,73 +45,21 @@ export default function Expenses() {
     setIsOpen(false);
   }
 
-  const entries = [{
-    "username": "sebas",
-    "type": "income",
-    "category": "sport",
-    "description": "Suspendisse potenti. In eleifend quam a odio. In hac habitasse platea dictumst.",
-    "sum": 1872
-  }, {
-    "username": "sebas",
-    "type": "expense",
-    "category": "housing",
-    "description": "Vestibulum ac est lacinia nisi venenatis tristique. Fusce congue, diam id ornare imperdiet, sapien urna pretium nisl, ut volutpat sapien arcu sed augue. Aliquam erat volutpat.",
-    "sum": 163
-  }, {
-    "username": "sebas",
-    "type": "expense",
-    "category": "health",
-    "description": "In quis justo. Maecenas rhoncus aliquam lacus. Morbi quis tortor id nulla ultrices aliquet.",
-    "sum": 115
-  }, {
-    "username": "sebas",
-    "type": "income",
-    "category": "sport",
-    "description": "Nullam porttitor lacus at turpis. Donec posuere metus vitae ipsum. Aliquam non mauris.",
-    "sum": 1215
-  }, {
-    "username": "sebas",
-    "type": "income",
-    "category": "education",
-    "description": "Quisque porta volutpat erat. Quisque erat eros, viverra eget, congue eget, semper rutrum, nulla. Nunc purus.",
-    "sum": 1926
-  }, {
-    "username": "sebas",
-    "type": "expense",
-    "category": "housing",
-    "description": "Duis aliquam convallis nunc. Proin at turpis a pede posuere nonummy. Integer non velit.",
-    "sum": 772
-  }, {
-    "username": "sebas",
-    "type": "income",
-    "category": "education",
-    "description": "Mauris enim leo, rhoncus sed, vestibulum sit amet, cursus id, turpis. Integer aliquet, massa id lobortis convallis, tortor risus dapibus augue, vel accumsan tellus nisi eu orci. Mauris lacinia sapien quis libero.",
-    "sum": 104
-  }, {
-    "username": "sebas",
-    "type": "income",
-    "category": "housing",
-    "description": "In hac habitasse platea dictumst. Morbi vestibulum, velit id pretium iaculis, diam erat fermentum justo, nec condimentum neque sapien placerat ante. Nulla justo.",
-    "sum": 371
-  }, {
-    "username": "sebas",
-    "type": "expense",
-    "category": "sport",
-    "description": "Donec diam neque, vestibulum eget, vulputate ut, ultrices vel, augue. Vestibulum ante ipsum primis in faucibus orci luctus et ultrices posuere cubilia Curae; Donec pharetra, magna vestibulum aliquet ultrices, erat tortor sollicitudin mi, sit amet lobortis sapien sapien non mi. Integer ac neque.",
-    "sum": 1099
-  }, {
-    "username": "sebas",
-    "type": "income",
-    "category": "housing",
-    "description": "Nulla ut erat id mauris vulputate elementum. Nullam varius. Nulla facilisi.",
-    "sum": 1872
-  }]
-
+  async function handleDelete(e) {
+    const id = e.target.parentElement?.parentElement?.id;
+    if (id) {
+      const res = await fetcher('/entries/delete', {
+        method: 'POST',
+        body: JSON.stringify({ id }),
+      })
+      window.location.reload(false);
+    }
+  }
 
   function mapEntry(entry) {
-    const { type, category, description, sum } = entry;
+    const { type, category, description, sum, _id, timestamp } = entry;
     return (
-      <div className="itemContainer">
+      <div className="itemContainer" id={_id}>
         <div className={`${type === "income" ? "greenSignBox" : "redSignBox"}`}>
           <div className="sign" style={{ color: `${type === "income" ? "#70fd6f" : "#fd716f"}` }}>
             {type === "income" ? <>+</> : <>-</>}
@@ -93,6 +70,12 @@ export default function Expenses() {
           <p style={{ marginLeft: '1em' }}>{capitalize(description)}</p>
           <p style={{ marginLeft: '1em' }}>{sum}</p>
         </div>
+        <div className="timeAndTrashBox">
+          <div className="timeBox"><span style={{ fontWeight: 'normal' }}>Created: </span>{timeFormatter(timestamp)}
+          </div>
+          <button className="trashIconButton" onClick={async (e) => await handleDelete(e)}
+          >&#128465;&#65039;</button>
+        </div>
       </div>
     )
   }
@@ -102,14 +85,16 @@ export default function Expenses() {
   return (
     <>
       <div className="title">
-        <div className=" titleText">Expenses</div>
+        <div className="titleText">Expenses</div>
       </div>
       <div className="body">
-        <div className="itemList">
-          <div>{entries.map(entry => mapEntry(entry))}</div>
+        <div className="itemsList">
+          <div>
+            {entries ? entries.map(entry => mapEntry(entry)) : 'lol'}
+          </div>
         </div>
-        <div>
-          <button onClick={openModal}>Open Modal</button>
+        <div className="rightContainer">
+          <button className="openModalButton" onClick={openModal}>Add Entry</button>
           <NewExpenseModal modalIsOpen={modalIsOpen} closeModal={closeModal}/>
         </div>
       </div>

@@ -1,7 +1,8 @@
 .body {
     height: 100%;
-    width: 80%;
+    width: 100%;
     display: flex;
+    justify-content: space-between;
     overflow: hidden;
 }
 
@@ -27,16 +28,21 @@
 .itemContainer {
     display: flex;
     align-content: stretch;
-    width: 80%;
+    width: 1500px;
     height: 10rem;
-    background: rgba(255, 255, 255, 0.6);
     border-radius: 5px;
     overflow: hidden;
     margin-top: 15px;
     margin-left: 10px;
+    background-color: rgba(245, 245, 245, 0.5);
 }
 
-.itemList {
+.rightContainer {
+    display: flex;
+    align-content: stretch;
+}
+
+.itemsList {
     overflow-y: scroll;
 }
 
@@ -47,17 +53,17 @@
 .redSignBox {
     display: flex;
     justify-content: center;
-    width: 5%;
+    width: 6%;
     text-align: center;
-    background-color: rgba(220, 0, 0, 0.6);
+    background-color: rgba(232, 62, 24, 0.6);
 }
 
 .greenSignBox {
     display: flex;
     justify-content: center;
-    width: 5%;
+    width: 6%;
     text-align: center;
-    background-color: rgba(0, 220, 0, 0.6);
+    background-color: rgba(106, 243, 8, 0.4);
 
 }
 
@@ -70,10 +76,55 @@
 
 .redDataBox {
     width: 90%;
-    background-color: rgba(220, 100, 100, 0.6);
 }
 
 .greenDataBox {
     width: 90%;
-    background-color: rgba(100, 220, 100, 0.6);
+}
+
+
+.timeAndTrashBox {
+    width: 20%;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+}
+
+.timeBox {
+    background-color: rgba(0, 0, 0, 0.4);
+    width: 100%;
+    height: 25px;
+    justify-content: center;
+    text-align: center;
+    border-bottom-left-radius: 5px;
+    color: whitesmoke;
+    font-size: 17px;
+    font-weight: bold;
+}
+
+.trashIconButton {
+    background-color: rgba(0, 0, 0, 0.3);
+    width: 50px;
+    height: 45px;
+    align-self: flex-end;
+    border-top-left-radius: 5px;
+    font-size: 30px;
+    justify-content: center;
+    text-align: center;
+    border: 0;
+}
+
+.openModalButton {
+    width: 200px;
+    height: 200px;
+    margin-top: 100px;
+    margin-right: 270px;
+    border-radius: 20px;
+    background-color: rgba(255, 255, 255, 0.3);
+    border: 0;
+    padding: 20px;
+    font-size: 40px;
+    color: whitesmoke;
+    justify-content: center;
+    font-weight: bolder;
 }
