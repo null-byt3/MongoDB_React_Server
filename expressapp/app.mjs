@@ -1,18 +1,3 @@
-// const MongoHandler = require('../MongoHandler');
-//
-// const createError = require('http-errors');
-// const express = require('express');
-// const path = require('path');
-// const cookieParser = require('cookie-parser');
-// const logger = require('morgan');
-// const cors = require("cors");
-//
-// const indexRouter = require('./routes/index');
-// const usersRouter = require('./routes/users');
-// const testAPIRouter = require('./routes/testAPI');
-// const login = require('./routes/login');
-
-
 import MongoHandler from './Mongo/MongoHandler.js';
 
 import createError from 'http-errors';
@@ -26,6 +11,7 @@ import indexRouter from './routes/index.js';
 import usersRouter from './routes/users.js';
 import testAPIRouter from './routes/testAPI.js';
 import login from './routes/login.js';
+import Entries from "./routes/entries.js";
 
 export const app = express();
 const __dirname = path.resolve();
@@ -53,6 +39,7 @@ app.use('/', indexRouter);
 app.use('/users', usersRouter);
 app.use('/testAPI', testAPIRouter);
 app.use('/login', login);
+app.use('/entries', Entries);
 
 // catch 404 and forward to error handler
 app.use(function (req, res, next) {

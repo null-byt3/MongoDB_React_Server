@@ -41,8 +41,24 @@ class MongoHandler {
     const dataToUpdate = { $set: data };
     this.DB.collection("users").updateOne(findBy, dataToUpdate, (err, res) => {
       if (err) throw err;
-      console.log("1 document updated");
+      console.log(`Updated user record of ${userName} with:`);
+      console.log(data);
     });
+  }
+
+  async insertEntryToCollection(collection, entry) {
+    const collectionsList = await this.DB.listCollections().toArray()
+    const collectionNames = collectionsList.map(collectionObj => collectionObj.name)
+    if (collectionNames.includes(collection)) {
+      const objectId = await this.DB.collection("users").insertOne(entry);
+      console.log(`DB | ${entry.type} entry for ${entry.username} inserted successfully`)
+      return objectId;
+    }
+    console.log('FAILURE');
+    return {
+      success: false,
+      error: 'Unable to insert to collection',
+    }
   }
 
   async closeConnection() {

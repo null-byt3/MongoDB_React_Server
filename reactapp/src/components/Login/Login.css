@@ -1,5 +1,33 @@
-.login-wrapper {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
+
+.Login {
+    position: absolute;
+    height: 100%;
+    width: 100%;
+    background: rgb(34, 193, 195);
+    background: linear-gradient(135deg, rgba(34, 193, 195, 1) 0%, rgba(253, 187, 45, 1) 100%);
+}
+
+.Login form {
+    margin: 0;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    -ms-transform: translate(-50%, -50%);
+    transform: translate(-50%, -50%);
+    border-radius: 25px;
+    padding: 20px;
+    width: 200px;
+    height: 150px;
+    background: rgba(255, 255, 255, 0.6);
+}
+
+.FormItem {
+    margin-bottom: 10px;
+    margin-left: 10px;
+}
+
+.LoginButton {
+    margin-top: 5px;
+    margin-left: 10px;
+    border-radius: 2px;
 }
