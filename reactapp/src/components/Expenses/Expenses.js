@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import './Expenses.css';
 import NewExpenseModal from "./NewExpenseModal";
-import fetcher from "../../utils/Fetcher";
+import { fetcher } from "../../utils/Fetcher";
 
 
 const capitalize = ([first, ...rest]) => first.toUpperCase() + rest.join('').toLowerCase();

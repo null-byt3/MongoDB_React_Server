@@ -83,3 +83,7 @@
     background-color: rgba(250, 235, 215, 1);
     /*background-color: red;*/
 }
+
+.buttonsCluster {
+    display: flex;
+}

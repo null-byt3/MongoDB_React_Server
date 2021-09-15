@@ -17,15 +17,15 @@ router.get('/', async (req, res) => {
   const sessionToken = req.get('x-session');
   const [username, sessionId] = Buffer.from(sessionToken, 'base64').toString().split('|');
   if (!username || !sessionId) {
-    res.status(403).send({ isValid: false, error: 'Invalid Cookie' });
+    res.status(403).send({ success: false, error: 'Invalid Cookie' });
     return;
   }
   const { success, error } = await validate(username, sessionId);
   if (!success) {
-    res.status(403).send({ isValid: false, error });
+    res.status(403).send({ success: false, error });
     return;
   }
-  res.send({ isValid: true })
+  res.send({ success: true })
   return;
 })
 

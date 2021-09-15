@@ -10,7 +10,6 @@ router.post("/new", async function (req, res) {
   const [username, sessionId] = Buffer.from(sessionToken, 'base64').toString().split('|');
   const entry = req.body;
   entry['username'] = username;
-  entry['timestamp'] = new Date().toISOString();
   try {
     const objectId = await mongoHandler.insertToCosts(entry);
     res.send({

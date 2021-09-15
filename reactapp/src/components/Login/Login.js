@@ -3,15 +3,8 @@ import Form from "react-bootstrap/Form";
 import Button from "react-bootstrap/Button";
 import "./Login.css";
 import Cookies from 'js-cookie';
-import fetcher from "../../utils/Fetcher";
+import { fetcherLogin } from "../../utils/Fetcher";
 
-async function attemptLogin(credentials) {
-  const res = await fetcher('/login', {
-    method: 'POST',
-    body: JSON.stringify(credentials)
-  });
-  return res;
-}
 
 export default function Login() {
   const [username, setUsername] = useState("");
@@ -23,7 +16,7 @@ export default function Login() {
 
   async function handleSubmit(event) {
     event.preventDefault();
-    const res = await attemptLogin({ username, password });
+    const res = await fetcherLogin({ username, password });
     if (res.authSuccessful) {
       Cookies.set('userId', username);
       Cookies.set('sessionId', res?.sessionId);

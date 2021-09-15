@@ -2,7 +2,7 @@ import Modal from "react-modal";
 import React, { useState } from "react";
 import './NewExpenseModal.css'
 import Select from "react-select";
-import fetcher from "../../utils/Fetcher";
+import { fetcher } from "../../utils/Fetcher";
 
 
 const customStyles = {

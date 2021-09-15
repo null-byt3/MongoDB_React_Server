@@ -1,4 +1,4 @@
-import { MongoClient, ObjectId } from 'mongodb';
+import { MongoClient, ObjectId, Timestamp } from 'mongodb';
 
 class MongoHandler {
   DB;
@@ -70,6 +70,7 @@ class MongoHandler {
   }
 
   async insertToCosts(entry) {
+    entry['timestamp'] = new Timestamp(new Date().toString());
     const objectId = await this.costsCollection.insertOne(entry);
     console.log(`DB | ${entry.type} entry for ${entry.username} inserted successfully`)
     return objectId;

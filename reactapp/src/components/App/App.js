@@ -6,14 +6,21 @@ import Expenses from "../Expenses/Expenses";
 import Preferences from "../Preferences/Preferences";
 import Reports from "../Reports/Reports";
 import Button from "react-bootstrap/Button";
-import fetcher from "../../utils/Fetcher";
+import { fetcher } from "../../utils/Fetcher";
+import Cookies from "js-cookie";
 
 async function validateCookie() {
-  const { isValid, error } = await fetcher('/login', { method: 'GET' })
+  const { success, error } = await fetcher('/login', { method: 'GET' })
   if (error) {
     console.log(error);
   }
-  return isValid ? true : false;
+  return success ? true : false;
+}
+
+function logOut() {
+  Cookies.remove('userId');
+  Cookies.remove('sessionId');
+  window.location.reload(false);
 }
 
 
@@ -41,13 +48,16 @@ function App() {
       <BrowserRouter>
         <div className="d-flex wrapper">
           <div className="ProjectHeader">MongoDB Project</div>
-          <Link to="/expenses" className="btn btn-secondary"
-                style={{ textDecoration: 'none' }}>&#128176; Expenses</Link>
-          <Link to="/reports" className="btn btn-secondary"
-                style={{ textDecoration: 'none' }}>&#128221; Reports</Link>
-          <Link to="/preferences" className="btn btn-secondary"
-                style={{ textDecoration: 'none' }}>&#9881;&#65039; Preferences</Link>
-          <Button className="btn btn-secondary">Hello</Button>
+          <div className="buttonsCluster">
+            <Link to="/expenses" className="btn btn-secondary"
+                  style={{ textDecoration: 'none' }}>&#128176; Expenses</Link>
+            <Link to="/reports" className="btn btn-secondary"
+                  style={{ textDecoration: 'none' }}>&#128221; Reports</Link>
+            <Link to="/preferences" className="btn btn-secondary"
+                  style={{ textDecoration: 'none' }}>&#9881;&#65039; Preferences</Link>
+            <Button className="btn btn-secondary" onClick={logOut} style={{ marginLeft: 'auto' }}>&#128682; Log
+              Out</Button>
+          </div>
         </div>
         <Switch>
           <Route path="/expenses">
