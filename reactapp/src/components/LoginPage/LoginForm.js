@@ -1,12 +1,12 @@
-import React, { useState } from "react";
 import Form from "react-bootstrap/Form";
 import Button from "react-bootstrap/Button";
-import "./Login.css";
-import Cookies from 'js-cookie';
-import { fetcherLogin } from "../../utils/Fetcher";
+import React, { useState } from "react";
+import { fetcherWithoutToken } from "../../utils/Fetcher";
+import Cookies from "js-cookie";
+import './LoginForm.css'
 
 
-export default function Login() {
+export default function LoginForm() {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
 
@@ -16,8 +16,11 @@ export default function Login() {
 
   async function handleSubmit(event) {
     event.preventDefault();
-    const res = await fetcherLogin({ username, password });
-    if (res.authSuccessful) {
+    const res = await fetcherWithoutToken('/login', {
+      method: 'POST',
+      body: JSON.stringify({ username, password }),
+    });
+    if (res.success) {
       Cookies.set('userId', username);
       Cookies.set('sessionId', res?.sessionId);
       window.location.reload(false);
@@ -26,8 +29,9 @@ export default function Login() {
     }
   }
 
+
   return (
-    <div className="Login">
+    <>
       <Form className="LoginForm" onSubmit={handleSubmit}>
         <Form.Group className="FormItem" size="lg" controlId="email">
           <Form.Label>Username</Form.Label>
@@ -46,10 +50,10 @@ export default function Login() {
             onChange={(e) => setPassword(e.target.value)}
           />
         </Form.Group>
-        <Button className="LoginButton" size="lg" type="submit" disabled={!validateForm()}>
-          Login
-        </Button>
       </Form>
-    </div>
-  );
+      <Button className="LoginButton" size="lg" type="submit" disabled={!validateForm()} onClick={handleSubmit}>
+        Login
+      </Button>
+    </>
+  )
 }

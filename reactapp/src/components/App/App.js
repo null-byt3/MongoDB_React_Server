@@ -1,5 +1,5 @@
 import './App.css';
-import Login from "../Login/Login";
+import LoginPage from "../LoginPage/LoginPage";
 import { useEffect, useState } from "react";
 import { BrowserRouter, Link, Route, Switch } from "react-router-dom";
 import Expenses from "../Expenses/Expenses";
@@ -40,7 +40,7 @@ function App() {
   }
 
   if (isValid === false) {
-    return <Login setValid={setValid}/>
+    return <LoginPage setValid={setValid}/>
   }
 
   return (

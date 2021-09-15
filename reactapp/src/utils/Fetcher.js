@@ -25,13 +25,12 @@ export async function fetcher(path, options) {
   return res;
 }
 
-export async function fetcherLogin(credentials) {
-  const res = await fetch(`http://localhost:9000/login`, {
-    method: 'POST',
+export async function fetcherWithoutToken(path, options) {
+  const res = await fetch(`http://localhost:9000${path}`, {
     headers: {
       'Content-Type': 'application/json',
     },
-    body: JSON.stringify(credentials),
+    ...options,
   })
     .then(response => response.json())
     .catch(err => console.log('fetcherLogin error: ', err.toString()))

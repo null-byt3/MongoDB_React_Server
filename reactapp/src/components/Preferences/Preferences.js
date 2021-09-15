@@ -3,6 +3,14 @@ import React from 'react';
 export default function Preferences() {
   console.log('Called Preferences');
   return (
-    <h2>Preferences</h2>
-  );
+    <>
+      <div className="title">
+        <div className="titleText">Preferences</div>
+      </div>
+      <div className="body">
+        lolz
+      </div>
+    </>
+  )
+    ;
 }

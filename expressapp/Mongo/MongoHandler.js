@@ -1,4 +1,4 @@
-import { MongoClient, ObjectId, Timestamp } from 'mongodb';
+import { MongoClient, ObjectId } from 'mongodb';
 
 class MongoHandler {
   DB;
@@ -9,7 +9,6 @@ class MongoHandler {
 
   constructor() {
     if (MongoHandler._instance) {
-      console.log('Using existing MongoDB instance');
       return MongoHandler._instance
     }
     console.log('Creating MongoDB Instance');
@@ -24,6 +23,7 @@ class MongoHandler {
       await this.MongoClient.connect();
       console.log('Connection Successful');
       this.DB = this.MongoClient.db('AsyncCourse')
+      console.log('AsyncCourse DB Loaded');
       const collectionsList = await this.DB.listCollections().toArray()
       const collectionNames = collectionsList.map(collectionObj => collectionObj.name);
       for (const collection of requiredCollections) {
@@ -42,8 +42,6 @@ class MongoHandler {
       this.costsCollection = this.DB.collection("costs");
       this.usersCollection = this.DB.collection("users");
       this.userChangesCollection = this.DB.collection("userchanges");
-
-      console.log('AsyncCourse DB Loaded');
     } catch (err) {
       console.log(err);
       throw err;
@@ -55,22 +53,37 @@ class MongoHandler {
     return this.MongoClient;
   }
 
-  async fetchUser(userName) {
-    return await this.usersCollection.findOne({ userName });
+  async fetchUser(username) {
+    return await this.usersCollection.findOne({ username });
   }
 
-  async updateUser(userName, data) {
-    const findBy = { userName };
+  async updateUser(username, data) {
+    const findBy = { username };
     const dataToUpdate = { $set: data };
     this.usersCollection.updateOne(findBy, dataToUpdate, (err, res) => {
       if (err) throw err;
-      console.log(`Updated user record of ${userName} with:`);
+      console.log(`Updated user record of ${username} with:`);
       console.log(data);
     });
   }
 
+  async createUser(userData) {
+    const { username } = userData;
+    const userExists = await this.fetchUser(username);
+    if (userExists) {
+      return {
+        success: false,
+        error: 'Username already exists'
+      }
+    }
+    await this.usersCollection.insertOne(userData)
+    console.log(`DB | New user ${username} created successfully`);
+    return {
+      success: true,
+    }
+  }
+
   async insertToCosts(entry) {
-    entry['timestamp'] = new Timestamp(new Date().toString());
     const objectId = await this.costsCollection.insertOne(entry);
     console.log(`DB | ${entry.type} entry for ${entry.username} inserted successfully`)
     return objectId;

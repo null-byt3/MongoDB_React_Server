@@ -11,7 +11,9 @@ import indexRouter from './routes/index.js';
 import usersRouter from './routes/users.js';
 import testAPIRouter from './routes/testAPI.js';
 import login from './routes/login.js';
-import Entries from "./routes/entries.js";
+import entries from "./routes/entries.js";
+import signup from "./routes/signup.js";
+
 
 export const app = express();
 const __dirname = path.resolve();
@@ -39,7 +41,8 @@ app.use('/', indexRouter);
 app.use('/users', usersRouter);
 app.use('/testAPI', testAPIRouter);
 app.use('/login', login);
-app.use('/entries', Entries);
+app.use('/entries', entries);
+app.use('/signup', signup)
 
 // catch 404 and forward to error handler
 app.use(function (req, res, next) {

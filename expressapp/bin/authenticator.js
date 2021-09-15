@@ -3,6 +3,8 @@ import { nanoid } from 'nanoid'
 import moment from 'moment';
 
 
+const COOKIE_EXPIRATION_TIME_MINUTES = '10';
+
 export async function authenticate(username, password) {
   const MongoInstance = new MongoHandler();
   const user = await MongoInstance.fetchUser(username);
@@ -21,7 +23,7 @@ export async function authenticate(username, password) {
   }
 
   const sessionId = nanoid();
-  const expiresAt = new moment().add('10', 'minutes').format();
+  const expiresAt = new moment().add(COOKIE_EXPIRATION_TIME_MINUTES, 'minutes').format();
   await MongoInstance.updateUser(username, {
     authentication: {
       sessionId,

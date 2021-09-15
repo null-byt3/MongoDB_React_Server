@@ -7,9 +7,9 @@ const router = express.Router();
 router.post('/', async (req, res) => {
   const { success, sessionId, error } = await authenticate(req.body.username, req.body.password);
   if (success === true) {
-    res.send({ authSuccessful: true, sessionId });
+    res.send({ success: true, sessionId });
   } else {
-    res.status(403).send({ authSuccessful: false, error })
+    res.status(403).send({ success: false, error })
   }
 });
 

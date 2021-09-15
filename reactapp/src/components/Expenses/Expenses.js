@@ -80,8 +80,6 @@ export default function Expenses() {
     )
   }
 
-
-  console.log('Called Expenses');
   return (
     <>
       <div className="title">
