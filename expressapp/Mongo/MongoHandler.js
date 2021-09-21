@@ -6,6 +6,9 @@ class MongoHandler {
   costsCollection;
   usersCollection;
   userChangesCollection;
+  console
+  return
+  entries;
 
   constructor() {
     if (MongoHandler._instance) {
@@ -48,7 +51,6 @@ class MongoHandler {
     }
   }
 
-
   getClient() {
     return this.MongoClient;
   }
@@ -61,7 +63,9 @@ class MongoHandler {
     const findBy = { username };
     const dataToUpdate = { $set: data };
     this.usersCollection.updateOne(findBy, dataToUpdate, (err, res) => {
-      if (err) throw err;
+      if (err) {
+        console.log(err);
+      }
       console.log(`Updated user record of ${username} with:`);
       console.log(data);
     });
@@ -85,19 +89,38 @@ class MongoHandler {
 
   async insertToCosts(entry) {
     const objectId = await this.costsCollection.insertOne(entry);
-    console.log(`DB | ${entry.type} entry for ${entry.username} inserted successfully`)
+    console.log(`DB | ${entry.category} entry for ${entry.username} inserted successfully`)
     return objectId;
   }
 
-  async getFromCostsByUsername(username) {
+  async getFromCosts(username) {
     const entries = await this.costsCollection.find({ username }).toArray();
+    console.log(`DB | Fetched all expenses of ${username}`)
     return entries;
   }
+
+  async getFromCostsByCategory(username, category) {
+    const entries = await this.costsCollection.find({ username, category }).toArray();
+    console.log(`DB | Fetched expenses of ${username} with filter 'Category: ${category}'`)
+    return entries;
+  }
+
+
+  async getFromCostsByTimeRange(username, startDay, endDay) {
+    const entries = await this.costsCollection.find({
+      username,
+      timestamp: {
+        $gte: startDay.toISOString(),
+        $lt: endDay.toISOString(),
+      }
+    }).toArray();
+    return entries;
+  }
+
 
   async removeFromCosts(id, username) {
     const _id = new ObjectId(id);
     const collectionFound = await this.costsCollection.find({ username, _id }).toArray();
-
 
     if (collectionFound) {
       const { acknowledged, deletedCount } = await this.costsCollection.deleteOne({ username, _id });
@@ -109,6 +132,7 @@ class MongoHandler {
     return { success: false, error: 'Unable to find entry' }
   }
 
+
   async closeConnection() {
     await this.MongoClient.close();
   }
@@ -119,4 +143,3 @@ class MongoHandler {
 }
 
 export default MongoHandler;
-// module.exports = MongoHandler;

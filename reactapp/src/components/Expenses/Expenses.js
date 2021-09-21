@@ -2,39 +2,44 @@ import React, { useEffect, useState } from 'react';
 import './Expenses.css';
 import NewExpenseModal from "./NewExpenseModal";
 import { fetcher } from "../../utils/Fetcher";
+import Select from "react-select";
 
 
 const capitalize = ([first, ...rest]) => first.toUpperCase() + rest.join('').toLowerCase();
 
 function timeFormatter(dateISOString) {
+  const zeroPad = (num, places) => String(num).padStart(places, '0')
+
   const date = new Date(dateISOString);
   const year = date.getFullYear().toString();
   const month = ( date.getMonth() + 101 ).toString().substring(1);
   const day = ( date.getDate() + 100 ).toString().substring(1);
-  const hours = date.getHours();
-  const minutes = date.getMinutes();
+  const hours = zeroPad(date.getHours(), 2);
+  const minutes = zeroPad(date.getMinutes(), 2);
   return `${day}/${month}/${year} ${hours}:${minutes}`;
 }
 
 
 export default function Expenses() {
   const [modalIsOpen, setIsOpen] = useState(false);
-  const [entries, setEntries] = useState([]);
+  const [expenses, setExpenses] = useState([]);
+  const [filter, setFilter] = useState('all');
+
 
   useEffect(() => {
-    async function fetchEntries() {
-      const { success, error, entries } = await fetcher('/entries', {
+    async function fetchExpenses() {
+      const { success, error, expenses } = await fetcher(`/expenses?filter=${filter}`, {
         method: 'GET'
       });
       if (success) {
-        setEntries(entries)
+        setExpenses(expenses)
       } else {
         console.log(error);
       }
     }
 
-    fetchEntries().catch(err => console.log(err));
-  }, [])
+    fetchExpenses().catch(err => console.log(err));
+  }, [filter])
 
 
   function openModal() {
@@ -48,7 +53,7 @@ export default function Expenses() {
   async function handleDelete(e) {
     const id = e.target.parentElement?.parentElement?.id;
     if (id) {
-      const res = await fetcher('/entries/delete', {
+      const res = await fetcher('/expenses/delete', {
         method: 'POST',
         body: JSON.stringify({ id }),
       })
@@ -57,15 +62,15 @@ export default function Expenses() {
   }
 
   function mapEntry(entry) {
-    const { type, category, description, sum, _id, timestamp } = entry;
+    const { category, description, sum, _id, timestamp } = entry;
     return (
       <div className="itemContainer" id={_id}>
-        <div className={`${type === "income" ? "greenSignBox" : "redSignBox"}`}>
-          <div className="sign" style={{ color: `${type === "income" ? "#70fd6f" : "#fd716f"}` }}>
-            {type === "income" ? <>+</> : <>-</>}
+        <div className="redSignBox">
+          <div className="sign" style={{ color: "#fd716f" }}>
+            <>-</>
           </div>
         </div>
-        <div className={`${type === "income" ? "greenDataBox" : "redDataBox"}`}>
+        <div className="redDataBox">
           <h2 style={{ marginLeft: '1em' }}>{capitalize(category)}</h2>
           <p style={{ marginLeft: '1em' }}>{capitalize(description)}</p>
           <p style={{ marginLeft: '1em' }}>{sum}</p>
@@ -80,20 +85,45 @@ export default function Expenses() {
     )
   }
 
+  function Filter() {
+    const options = [
+      { value: 'all', label: 'All' },
+      { value: 'food', label: 'Food' },
+      { value: 'health', label: 'Health' },
+      { value: 'housing', label: 'Housing' },
+      { value: 'sport', label: 'Sport' },
+      { value: 'education', label: 'Education' },
+      { value: 'other', label: 'Other' },
+    ]
+
+    return (
+      <div className="FilterContainer">
+        <div className="FilterText">Filter:</div>
+        <Select
+          defaultValue={options.filter(option => option.value === filter)[0]}
+          options={options}
+          isSearchable={false}
+          onChange={(e) => setFilter(e.value)}
+        />
+      </div>
+    )
+  }
+
   return (
     <>
       <div className="title">
         <div className="titleText">Expenses</div>
       </div>
       <div className="body">
-        <div className="itemsList">
-          <div>
-            {entries ? entries.map(entry => mapEntry(entry)) : 'lol'}
+        <Filter/>
+        <div className="expensesAndButton">
+          <div className="itemsList">
+            {expenses ? expenses.map(expense => mapEntry(expense)) : 'lol'}
           </div>
-        </div>
-        <div className="rightContainer">
-          <button className="openModalButton" onClick={openModal}>Add Entry</button>
-          <NewExpenseModal modalIsOpen={modalIsOpen} closeModal={closeModal}/>
+          <div className="rightContainer">
+            <button className="openModalButton" onClick={openModal}>Add Entry</button>
+            <NewExpenseModal modalIsOpen={modalIsOpen} closeModal={closeModal}/>
+          </div>
         </div>
       </div>
     </>

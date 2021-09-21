@@ -1,9 +1,9 @@
-.body {
+.PreferencesBody {
     height: 100%;
     width: 100%;
-    display: flex;
-    justify-content: space-between;
     overflow: hidden;
+    display: flex;
+    flex-direction: column;
 }
 
 .title {
@@ -23,4 +23,44 @@
     font-size: 30px;
     font-weight: bolder;
     text-shadow: 2px 2px black;
+}
+
+.PreferencesContainer {
+    display: flex;
+    flex-direction: column;
+    margin-top: 20px;
+    margin-left: 20px;
+    width: 400px;
+}
+
+.FormItem {
+    margin-bottom: 10px;
+    margin-left: 10px;
+    font-size: large;
+}
+
+.UpdateButton {
+    border-radius: 15px;
+    background: rgba(255, 255, 255, 0.6);
+    border: 0;
+    padding: 10px;
+    width: 230px;
+    margin-top: 20px;
+    margin-left: 20px;
+    font-size: larger;
+    font-weight: bold;
+    color: dodgerblue;
+}
+
+.UpdateButton:hover {
+    background-color: rgba(250, 235, 215, 0.7);
+}
+
+.UpdateButton:disabled {
+    opacity: 0.3;
+}
+
+.UpdateButton:active {
+    background-color: rgba(250, 235, 215, 1);
+    /*background-color: red;*/
 }

@@ -9,7 +9,7 @@ router.post("/new", async function (req, res) {
   const sessionToken = req.get('x-session');
   const [username, sessionId] = Buffer.from(sessionToken, 'base64').toString().split('|');
   const entry = req.body;
-  entry['timestamp'] = new Date().toString();
+  entry['timestamp'] = new Date().toISOString();
   entry['username'] = username;
   try {
     const objectId = await mongoHandler.insertToCosts(entry);
@@ -54,11 +54,12 @@ router.post("/delete", async function (req, res) {
 router.get("/", async function (req, res) {
   const sessionToken = req.get('x-session');
   const [username, sessionId] = Buffer.from(sessionToken, 'base64').toString().split('|');
+  const { filter } = req.query;
   try {
-    const entries = await mongoHandler.getFromCostsByUsername(username);
+    const expenses = !filter || filter === 'all' ? await mongoHandler.getFromCosts(username) : await mongoHandler.getFromCostsByCategory(username, filter);
     res.send({
       success: true,
-      entries
+      expenses,
     });
   } catch (error) {
     res.status(500).send({

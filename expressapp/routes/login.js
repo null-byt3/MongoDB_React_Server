@@ -1,5 +1,5 @@
 import express from "express";
-import { authenticate, validate } from "../bin/authenticator.js";
+import { authenticate, validate } from "../utils/authenticator.js";
 
 const router = express.Router();
 

@@ -7,13 +7,12 @@ import cookieParser from 'cookie-parser';
 import logger from 'morgan';
 import cors from 'cors';
 
-import indexRouter from './routes/index.js';
 import usersRouter from './routes/users.js';
-import testAPIRouter from './routes/testAPI.js';
 import login from './routes/login.js';
-import entries from "./routes/entries.js";
+import expenses from "./routes/expenses.js";
 import signup from "./routes/signup.js";
-
+import preferences from "./routes/preferences.js";
+import reports from "./routes/reports.js";
 
 export const app = express();
 const __dirname = path.resolve();
@@ -37,12 +36,13 @@ app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
-app.use('/', indexRouter);
 app.use('/users', usersRouter);
-app.use('/testAPI', testAPIRouter);
 app.use('/login', login);
-app.use('/entries', entries);
+app.use('/expenses', expenses);
 app.use('/signup', signup)
+app.use('/preferences', preferences);
+app.use('/reports', reports);
+
 
 // catch 404 and forward to error handler
 app.use(function (req, res, next) {

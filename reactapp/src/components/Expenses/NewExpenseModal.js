@@ -20,27 +20,22 @@ const customStyles = {
 };
 
 export default function NewExpenseModal(props) {
-  const [type, setType] = useState("");
   const [category, setCategory] = useState("");
   const [description, setDescription] = useState("");
-  const [sum, setSum] = useState("");
+  const [sum, setSum] = useState(0);
   const { modalIsOpen, closeModal } = props;
-  const types = [
-    { value: 'expense', label: 'Expense' },
-    { value: 'income', label: 'Income' },
-  ]
-
   const categories = [
     { value: 'food', label: 'Food' },
     { value: 'health', label: 'Health' },
     { value: 'housing', label: 'Housing' },
     { value: 'sport', label: 'Sport' },
     { value: 'education', label: 'Education' },
+    { value: 'other', label: 'Other' },
   ]
 
   async function onSubmit() {
-    const body = { type, category, description, sum }
-    const { success, error } = await fetcher('/entries/new', {
+    const body = { category, description, sum }
+    const { success, error } = await fetcher('/expenses/new', {
       method: 'POST',
       body: JSON.stringify(body),
     });
@@ -65,10 +60,6 @@ export default function NewExpenseModal(props) {
       <h2>New Entry</h2>
       <form className="modalForm">
         <div className="formField">
-          <div className="fieldHeader">Type:</div>
-          <div><Select options={types} onChange={(e) => setType(e.value)}/></div>
-        </div>
-        <div className="formField">
           <div className="fieldHeader">Category:</div>
           <div><Select options={categories} onChange={(e) => setCategory(e.value)}/>
           </div>
@@ -82,7 +73,8 @@ export default function NewExpenseModal(props) {
         </div>
         <div className="formField">
           <div className="fieldHeader">Sum:</div>
-          <div>₪ <input type="number" autoComplete="off" onChange={(e) => setSum(e.target.value)}/></div>
+          <div>₪ <input type="number" autoComplete="off" onChange={(e) => setSum(Number.parseInt(e.target.value))}/>
+          </div>
         </div>
       </form>
 

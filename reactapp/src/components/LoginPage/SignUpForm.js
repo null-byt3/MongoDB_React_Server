@@ -12,7 +12,7 @@ export default function SignUpForm() {
   const [firstname, setFirstname] = useState("");
   const [lastname, setLastname] = useState("");
   const [birthday, setBirthday] = useState("2000-01-01");
-  const [gender, setGender] = useState("male");
+  const [maritalStatus, setMaritalStatus] = useState("Single");
 
   function validateForm() {
     if (username.length < 3) {
@@ -35,7 +35,7 @@ export default function SignUpForm() {
       return false;
     }
 
-    if (gender.length === 0) {
+    if (maritalStatus.length === 0) {
       return false;
     }
     return true;
@@ -51,7 +51,7 @@ export default function SignUpForm() {
         firstname,
         lastname,
         birthday: new Date(birthday).toISOString(),
-        gender
+        maritalStatus
       }),
     });
     if (res.success) {
@@ -105,10 +105,12 @@ export default function SignUpForm() {
                  onChange={(e) => setBirthday(e.target.value)}/>
         </Form.Group>
         <Form.Group className="FormItem" size="lg" controlId="password">
-          <Form.Label>Gender</Form.Label>
-          <select onClick={(e) => setGender(e.target.value)} style={{ width: '100%' }}>
-            <option value="male">Male</option>
-            <option value="female">Female</option>
+          <Form.Label>Marital Status</Form.Label>
+          <select onClick={(e) => setMaritalStatus(e.target.value)} style={{ width: '100%' }}>
+            <option value="single">Single</option>
+            <option value="married">Married</option>
+            <option value="divorced">Divorced</option>
+            <option value="widowed">Widowed</option>
           </select>
         </Form.Group>
       </Form>

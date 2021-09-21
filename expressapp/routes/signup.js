@@ -1,6 +1,6 @@
 import express from "express";
 import MongoHandler from "../Mongo/MongoHandler.js";
-import { authenticate } from "../bin/authenticator.js";
+import { authenticate } from "../utils/authenticator.js";
 
 const router = express.Router();
 const mongoHandler = new MongoHandler();
