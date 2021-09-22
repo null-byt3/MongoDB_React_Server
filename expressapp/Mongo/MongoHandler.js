@@ -114,6 +114,7 @@ class MongoHandler {
         $lt: endDay.toISOString(),
       }
     }).toArray();
+    console.log(`DB | Fetched all ${new Intl.DateTimeFormat('en-US', { month: 'long' }).format(endDay)} expenses of ${username}`)
     return entries;
   }
 
@@ -121,24 +122,15 @@ class MongoHandler {
   async removeFromCosts(id, username) {
     const _id = new ObjectId(id);
     const collectionFound = await this.costsCollection.find({ username, _id }).toArray();
-
     if (collectionFound) {
       const { acknowledged, deletedCount } = await this.costsCollection.deleteOne({ username, _id });
       if (acknowledged && deletedCount) {
+        console.log(`DB | Removed expense of ${username}`)
         return { success: true };
       }
       return { success: false, error: 'Unable to delete entry' }
     }
     return { success: false, error: 'Unable to find entry' }
-  }
-
-
-  async closeConnection() {
-    await this.MongoClient.close();
-  }
-
-  isConnectedToDB() {
-    return !!( this.MongoClient && this.DB );
   }
 }
 
