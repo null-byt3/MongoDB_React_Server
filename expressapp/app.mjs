@@ -7,7 +7,6 @@ import cookieParser from 'cookie-parser';
 import logger from 'morgan';
 import cors from 'cors';
 
-import usersRouter from './routes/users.js';
 import login from './routes/login.js';
 import expenses from "./routes/expenses.js";
 import signup from "./routes/signup.js";
@@ -36,7 +35,6 @@ app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
-app.use('/users', usersRouter);
 app.use('/login', login);
 app.use('/expenses', expenses);
 app.use('/signup', signup)
