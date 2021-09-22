@@ -16,6 +16,8 @@ const customStyles = {
     borderRadius: '25px',
     border: '1px solid black',
     backgroundColor: 'whitesmoke',
+    height: '460px',
+    width: '400px',
   },
 };
 
@@ -55,7 +57,6 @@ export default function NewExpenseModal(props) {
       onRequestClose={closeModal}
       ariaHideApp={false}
       style={customStyles}
-      contentLabel="Example Modal"
     >
       <h2>New Entry</h2>
       <form className="modalForm">

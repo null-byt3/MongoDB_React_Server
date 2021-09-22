@@ -16,6 +16,8 @@ export async function getMonthDateRange(username, month) {
   }
 
   const expensesByCategory = {}
+  let totalExpenses = 0;
+  let totalSum = 0;
 
   for (let expense of expenses) {
     const { category } = expense;
@@ -24,9 +26,12 @@ export async function getMonthDateRange(username, month) {
     }
     expensesByCategory[category].amount++;
     expensesByCategory[category].sum += expense.sum;
+    totalExpenses++;
+    totalSum += expense.sum;
   }
 
-  return expensesByCategory;
+
+  return { expensesByCategory, totalExpenses, totalSum };
 
 }
 

@@ -10,16 +10,18 @@ router.get("/", async function (req, res) {
   const [username, sessionId] = Buffer.from(sessionToken, 'base64').toString().split('|');
   const { month } = req.query;
 
-  if (!month || month === 'all') {
-    const { success, data } = await getMonthDateRange(username);
-  } else {
-    const { success, data } = await getMonthDateRange(username, month);
+  try {
+    const data = !month || month === 'all' ? await getMonthDateRange(username) : await getMonthDateRange(username, month);
+    res.send({
+      success: true,
+      data
+    });
+  } catch (error) {
+    res.status(500).send({
+      success: false,
+      error
+    })
   }
-
-
-  res.send({
-    success: true,
-  });
 
 });
 

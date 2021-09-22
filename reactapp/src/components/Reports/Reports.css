@@ -24,3 +24,69 @@
     font-weight: bolder;
     text-shadow: 2px 2px black;
 }
+
+.ReportsContainer {
+    display: flex;
+    justify-content: space-between;
+}
+
+.ReportBox {
+    width: 500px;
+    height: 600px;
+    background-color: rgba(255, 255, 255, 0.3);
+    border-radius: 20px;
+    margin: 20px;
+    padding: 50px;
+}
+
+.ReportBoxTitle {
+    color: whitesmoke;
+    font-size: 30px;
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+.noDataBox {
+    width: 200px;
+    height: 200px;
+    margin: auto;
+    border-radius: 20px;
+    background-color: rgba(255, 255, 255, 0.3);
+    border: 0;
+    padding: 20px;
+    font-size: 60px;
+    color: whitesmoke;
+    justify-content: center;
+    font-weight: bolder;
+    text-align: center;
+}
+
+.ReportItemsContainer {
+    margin-top: 40px;
+    display: flex;
+    flex-direction: column;
+}
+
+.reportItem {
+    margin-bottom: 15px;
+    display: flex;
+    justify-content: space-between;
+}
+
+.reportItemTotals {
+    margin-bottom: 15px;
+    display: flex;
+    justify-content: space-between;
+    margin-top: 100px;
+}
+
+.expenseName {
+    font-size: 30px;
+    font-weight: bold;
+    color: whitesmoke;
+}
+
+.expenseValue {
+    font-size: 30px;
+    color: darkred;
+}
